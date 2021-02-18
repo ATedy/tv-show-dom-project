@@ -62,3 +62,9 @@ ul li {
     display: inline;
     padding-left: 15px;
   }
+
+  #episodeDropdown{
+    height: 24px;
+    width: 220px;
+    margin-right: 5em;
+  }

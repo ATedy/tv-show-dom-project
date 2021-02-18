@@ -66,3 +66,30 @@ function searchEpisode(e) {
 }
 
 searchBar.addEventListener("keyup", searchEpisode);
+
+//Level-300 Episode dropdown
+
+const episodeDropdown = document.getElementById("episodeDropdown");
+for (let i = 0; i < allEpisodes.length; i++) {
+  let oneEpisodeDropdown = document.createElement("option");
+  oneEpisodeDropdown.value = i;
+  if (allEpisodes[i].number < 10) {
+    oneEpisodeDropdown.innerHTML = `S0${allEpisodes[i].season}E0${allEpisodes[i].number} - ${allEpisodes[i].name}`;
+  } else {
+    oneEpisodeDropdown.innerHTML = `S0${allEpisodes[i].season}E${allEpisodes[i].number} - ${allEpisodes[i].name}`;
+  }
+  episodeDropdown.appendChild(oneEpisodeDropdown);
+}
+
+function dropdownDisplay() {
+  let temp = episodeDropdown.value;
+  console.log(temp);
+  for (let j = 0; j < allEpisodes.length; j++) {
+    // console.log(allEpisodes[j].id);
+    episodeContainer[j].classList.add("hidden");
+    // episodeContainer[j].classList.remove("hidden");
+  }
+
+  episodeContainer[temp].classList.remove("hidden");
+  // makePageForEpisodes(allEpisodes[i]);
+}
