@@ -4,8 +4,8 @@ let rootElem = document.getElementById("root");
 function setup() {
   makePageForEpisodes(allEpisodes);
 }
-// parent container for all the divs
 
+// Leve100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
     let episodeContainer = document.createElement("div");
@@ -81,15 +81,18 @@ for (let i = 0; i < allEpisodes.length; i++) {
   episodeDropdown.appendChild(oneEpisodeDropdown);
 }
 
-function dropdownDisplay() {
+function dropdownDisplay(e) {
   let temp = episodeDropdown.value;
   console.log(temp);
   for (let j = 0; j < allEpisodes.length; j++) {
-    // console.log(allEpisodes[j].id);
     episodeContainer[j].classList.add("hidden");
-    // episodeContainer[j].classList.remove("hidden");
   }
-
   episodeContainer[temp].classList.remove("hidden");
-  // makePageForEpisodes(allEpisodes[i]);
+
+  //Refreshing the dropdown after selecting
+  episodeDropdown.addEventListener("mouseover", (e) => {
+    document.location.reload(true);
+  });
 }
+
+// e.preventDefault();

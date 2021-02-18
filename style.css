@@ -68,3 +68,12 @@ ul li {
     width: 220px;
     margin-right: 5em;
   }
+  #copyrightInfo{
+    /* position: fixed;
+    bottom: 100; */
+    text-align: center;
+    background-color: #f2f3f5;
+    padding: 1px;
+    border-radius: 2px;
+    
+  }
