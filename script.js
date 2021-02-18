@@ -37,6 +37,7 @@ window.onload = setup;
 //Level 200
 const searchBar = document.getElementById("searchInput");
 let episodeContainer = document.getElementsByClassName("episodeContainer");
+console.log(episodeContainer.length);
 
 function searchEpisode(e) {
   // catching the user input value from the input field
@@ -84,7 +85,7 @@ for (let i = 0; i < allEpisodes.length; i++) {
 function dropdownDisplay(e) {
   let temp = episodeDropdown.value;
   console.log(temp);
-  for (let j = 0; j < allEpisodes.length; j++) {
+  for (let j = 0; j < episodeContainer.length; j++) {
     episodeContainer[j].classList.add("hidden");
   }
   episodeContainer[temp].classList.remove("hidden");
