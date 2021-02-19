@@ -73,6 +73,7 @@ searchBar.addEventListener("keyup", searchEpisode);
 const episodeDropdown = document.getElementById("episodeDropdown");
 for (let i = 0; i < allEpisodes.length; i++) {
   let oneEpisodeDropdown = document.createElement("option");
+  // each option element is getting index of the allEpisodes array as its value
   oneEpisodeDropdown.value = i;
   if (allEpisodes[i].number < 10) {
     oneEpisodeDropdown.innerHTML = `S0${allEpisodes[i].season}E0${allEpisodes[i].number} - ${allEpisodes[i].name}`;
@@ -83,6 +84,7 @@ for (let i = 0; i < allEpisodes.length; i++) {
 }
 
 function dropdownDisplay(e) {
+  // temp holds the value of each option every time the event fired
   let temp = episodeDropdown.value;
   console.log(temp);
   for (let j = 0; j < episodeContainer.length; j++) {
