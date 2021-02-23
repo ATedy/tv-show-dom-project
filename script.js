@@ -5,7 +5,7 @@ function setup() {
   makePageForEpisodes(allEpisodes);
 }
 
-// Leve100 showing all the episodes on the page
+// Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
     let episodeContainer = document.createElement("div");
@@ -40,7 +40,7 @@ let episodeContainer = document.getElementsByClassName("episodeContainer");
 console.log(episodeContainer.length);
 
 function searchEpisode(e) {
-  // catching the user input value from the input field
+  // catches the user input value from the input field
   let searchValue = e.target.value.toLowerCase();
   const filteredEpisodes = [];
   //filters the episodes and push the to the filtered array
