@@ -1,5 +1,3 @@
-// You can edit ALL of the code here
-
 //parent Element for the whole body content
 const rootElem = document.getElementById("root");
 // searchInput the input field
@@ -8,11 +6,61 @@ const searchBar = document.getElementById("searchInput");
 const episodeContainer = document.getElementsByClassName("episodeContainer");
 // episodeDropdown the select tag id
 const episodeDropdown = document.getElementById("episodeDropdown");
+// showDropdown the select tag id
+const showDropdown = document.getElementById("showDropdown");
+// all shows are in the allShows Array
+const allShows = getAllShows();
+let episodesList;
+// console.log(allShows.length);
+
+// an async function that returns the fetched promise
+function showApiDisplayer() {
+  let currentShowId = showDropdown.value;
+  let tvShowApi = "https://api.tvmaze.com/shows/SHOW_ID/episodes";
+  let currentShowApi = tvShowApi.replace("SHOW_ID", currentShowId);
+  // console.log(currentShowApi);
+  return currentShowApi;
+}
+
+// function apiCall() {
+//   showDropdown.addEventListener("change", (e) => {
+//     let currentShowId = showDropdown.value;
+//     let tvShowApi = "https://api.tvmaze.com/shows/SHOW_ID/episodes";
+//     let currentShowApi = tvShowApi.replace("SHOW_ID", currentShowId);
+//     console.log(currentShowApi);
+//     if (e.isTrusted === true) {
+//       console.log("event triggered");
+//       console.log(e.target.value);
+//     }
+//   });
+// }
 
 async function allEpisodes() {
-  const promise = await fetch("https://api.tvmaze.com/shows/82/episodes");
-  const episodes = await promise.json();
-  return episodes;
+  let fetchedPromise;
+  // let episodes;
+
+  showDropdown.addEventListener("change", async () => {
+    if (showDropdown.value !== 1632) {
+      let url = showApiDisplayer();
+      console.log(showApiDisplayer());
+      fetchedPromise = await fetch(url);
+
+      episodesList = await fetchedPromise.json();
+
+      makePageForEpisodes(episodesList);
+      searchBar.addEventListener("keyup", (e) =>
+        searchEpisode(e, episodesList)
+      );
+      allEpisodesDropdown(episodesList);
+    }
+  });
+
+  // console.log(fetchedPromise);
+  // fetchedPromise = await fetch(showApiDisplayer());
+  // episodes = await fetchedPromise.json();
+  // console.log(episodes);
+
+  // return episodes;
 }
 
 // Level100 showing all the episodes on the page
@@ -43,9 +91,9 @@ function makePageForEpisodes(episodeList) {
   }
 }
 
-// Level 200
+// Level 200- searching fro episode in the input field
 function searchEpisode(e, episodeList) {
-  // catches the user input value from the input field
+  // catches the user input value from the input field and lowercase it
   let searchValue = e.target.value.toLowerCase();
   const filteredEpisodes = [];
   //filters the episodes and push the to the filtered array
@@ -71,9 +119,9 @@ function searchEpisode(e, episodeList) {
   rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
 
-//Level-300 Episode dropdown
+//Level-300 Episode dropdown - displaying and selecting episode from the dropdown
 
-function dropdownDisplay(episodeList) {
+function allEpisodesDropdown(episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
     let oneEpisodeDropdown = document.createElement("option");
     // each option element is getting index of the allEpisodes array as its value
@@ -85,7 +133,7 @@ function dropdownDisplay(episodeList) {
     }
     episodeDropdown.appendChild(oneEpisodeDropdown);
   }
-  //All-Episodes will be addded as a first option element in the
+  //All-Episodes will be addded as a first option element using the prepend in the dropdown
   let firstOption = document.createElement("option");
   firstOption.value = "allEpisodes";
   firstOption.innerHTML = "All-Episodes";
@@ -95,39 +143,51 @@ function dropdownDisplay(episodeList) {
   episodeDropdown.addEventListener("change", (e) =>
     displayEpisode(e, episodeList)
   );
-
-  // temp holds the value of each option every time the event fired
-  // let temp = episodeDropdown.value;
-  // console.log(temp);
-  // for (let j = 0; j < episodeContainer.length; j++) {
-  //   episodeContainer[j].classList.add("hidden");
-  // }
-  // episodeContainer[temp].classList.remove("hidden");
-
-  // //Refreshing the dropdown after selecting
-  // episodeDropdown.addEventListener("mouseover", (e) => {
-  //   document.location.reload(true);
-  // });
 }
 
 function displayEpisode(e, episodeList) {
+  // if value is allEpisode - all page wil be displayed
   if (e.target.value === "allEpisodes") {
     makePageForEpisodes(episodeList);
   } else {
-    // makeEpisode takes an array
+    // makeEpisode takes an array using the [] we are passing a single element as an array
     makePageForEpisodes([episodeList[e.target.value]]);
   }
 }
 
+function allShowsDropdown() {
+  //All-Episodes will be addded as a first option element using the prepend in the dropdown
+
+  for (let i = 0; i < allShows.length; i++) {
+    let oneShowDropdown = document.createElement("option");
+    // each option element is getting index of the allEpisodes array as its value
+    oneShowDropdown.value = `${allShows[i].id}`;
+    oneShowDropdown.innerHTML = `${allShows[i].name}`;
+    // console.log(oneShowDropdown.value);
+    showDropdown.appendChild(oneShowDropdown);
+  }
+}
+
+allShowsDropdown();
+
+// setup is an async functions that awaits promise from another async function allEpisodes()
 async function setup() {
-  const episodesList = await allEpisodes();
-  makePageForEpisodes(episodesList);
+  episodesList = await allEpisodes();
+  await makePageForEpisodes(episodesList);
   searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
-  dropdownDisplay(episodesList);
+  await allEpisodesDropdown(episodesList);
+
+  //error handling added
+  // try {
+
+  // } catch (error) {
+  //   console.log(error);
+  // }
 }
 
 window.onload = setup;
 
-//Level 200
-
-// e.preventDefault();
+// //Refreshing the dropdown after selecting
+// episodeDropdown.addEventListener("mouseover", (e) => {
+//   document.location.reload(true);
+//
