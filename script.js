@@ -22,6 +22,20 @@ function showApiDisplayer() {
   return currentShowApi;
 }
 
+async function updateShows() {
+  let url = showApiDisplayer();
+  console.log(url);
+  fetchedPromise = await fetch(url);
+
+  episodesList = await fetchedPromise.json();
+
+  makePageForEpisodes(episodesList);
+  // searchBar.addEventListener("keyup", (e) =>
+  //   searchEpisode(e, episodesList)
+  // );
+  allEpisodesDropdown(episodesList);
+}
+
 // function apiCall() {
 //   showDropdown.addEventListener("change", (e) => {
 //     let currentShowId = showDropdown.value;
@@ -35,33 +49,33 @@ function showApiDisplayer() {
 //   });
 // }
 
-async function allEpisodes() {
-  let fetchedPromise;
-  // let episodes;
+// async function allEpisodes() {
+//   let fetchedPromise;
+//   // let episodes;
 
-  showDropdown.addEventListener("change", async () => {
-    if (showDropdown.value !== 1632) {
-      let url = showApiDisplayer();
-      console.log(showApiDisplayer());
-      fetchedPromise = await fetch(url);
+//   showDropdown.addEventListener("change", async () => {
+//     if (showDropdown.value !== 1632) {
+//       let url = showApiDisplayer();
+//       console.log(showApiDisplayer());
+//       fetchedPromise = await fetch(url);
 
-      episodesList = await fetchedPromise.json();
+//       episodesList = await fetchedPromise.json();
 
-      makePageForEpisodes(episodesList);
-      searchBar.addEventListener("keyup", (e) =>
-        searchEpisode(e, episodesList)
-      );
-      allEpisodesDropdown(episodesList);
-    }
-  });
+//       makePageForEpisodes(episodesList);
+//       searchBar.addEventListener("keyup", (e) =>
+//         searchEpisode(e, episodesList)
+//       );
+//       allEpisodesDropdown(episodesList);
+//     }
+//   });
 
-  // console.log(fetchedPromise);
-  // fetchedPromise = await fetch(showApiDisplayer());
-  // episodes = await fetchedPromise.json();
-  // console.log(episodes);
+// console.log(fetchedPromise);
+// fetchedPromise = await fetch(showApiDisplayer());
+// episodes = await fetchedPromise.json();
+// console.log(episodes);
 
-  // return episodes;
-}
+// return episodes;
+// }
 
 // Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
@@ -79,8 +93,12 @@ function makePageForEpisodes(episodeList) {
     } else {
       episodeName.innerHTML = ` ${episodeList[i].name} - S0${episodeList[i].season}E${episodeList[i].number}`;
     }
+    if (episodeList[i].image === null) {
+      episodeImg.src = "";
+    } else {
+      episodeImg.src = episodeList[i].image.medium;
+    }
 
-    episodeImg.src = episodeList[i].image.medium;
     episodeSummary.innerHTML = episodeList[i].summary;
 
     // appending elements of each episode
@@ -122,6 +140,7 @@ function searchEpisode(e, episodeList) {
 //Level-300 Episode dropdown - displaying and selecting episode from the dropdown
 
 function allEpisodesDropdown(episodeList) {
+  episodeDropdown.innerHTML = "";
   for (let i = 0; i < episodeList.length; i++) {
     let oneEpisodeDropdown = document.createElement("option");
     // each option element is getting index of the allEpisodes array as its value
@@ -156,6 +175,27 @@ function displayEpisode(e, episodeList) {
 }
 
 function allShowsDropdown() {
+  // let sortedShows  = allShows.sort(a, b){
+
+  // }
+
+  allShows.sort(function (a, b) {
+    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
+
+  // allShows.sort(function (a, b) {
+  //   return a.id - b.id;
+  // });
+
   //All-Episodes will be addded as a first option element using the prepend in the dropdown
 
   for (let i = 0; i < allShows.length; i++) {
@@ -172,7 +212,11 @@ allShowsDropdown();
 
 // setup is an async functions that awaits promise from another async function allEpisodes()
 async function setup() {
-  episodesList = await allEpisodes();
+  let fetchedPromise = await fetch(showApiDisplayer());
+  episodesList = await fetchedPromise.json();
+  // episodesList = await allEpisodes();
+  showDropdown.addEventListener("change", updateShows);
+  console.log(episodesList);
   await makePageForEpisodes(episodesList);
   searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
   await allEpisodesDropdown(episodesList);
