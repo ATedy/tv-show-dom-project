@@ -68,6 +68,12 @@ body {
   margin-right: 5em;
 }
 
+#showDropdown {
+  height: 24px;
+  width: 220px;
+  margin-right: 5em;
+}
+
 #copyrightInfo {
   text-align: center;
   background-color: #f2f3f5;

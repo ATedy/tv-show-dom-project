@@ -9,19 +9,21 @@
   </head>
 
   <body>
-    <select name="episodes" id="episodeDropdown" onchange="dropdownDisplay()">
-    </select>
+    <select name="shows" id="showDropdown"> </select>
+    <select name="episodes" id="episodeDropdown"> </select>
     <input
       id="searchInput"
       type="text"
       name="search"
       placeholder="Search Episode Here"
     />
-    <h4 id="episodeDisplay">Displaying 73/73 episodes</h4>
+    <h4 id="episodeDisplay">Displaying All episodes</h4>
     <div id="root"></div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
+    <!-- Loads a provided function called getAllShows() which returns all shows -->
+    <script src="shows.js"></script>
 
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
