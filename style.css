@@ -1,6 +1,9 @@
 body {
   background-color: #d9dadb;
 }
+#heading {
+  text-align: center;
+}
 
 /* main div container */
 #root {
@@ -11,6 +14,28 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   padding: 2rem;
+}
+
+/* series dropdown styling */
+#showDropdown {
+  height: 24px;
+  width: 250px;
+  margin-right: 5em;
+  margin-left: 3.5em;
+}
+
+/* episode dropdown styling */
+#episodeDropdown {
+  height: 24px;
+  width: 220px;
+  margin-right: 5em;
+}
+
+/* search text input id */
+#searchInput {
+  margin-top: 10px;
+  width: 18em;
+  height: 20px;
 }
 
 /* div containing each episode */
@@ -45,13 +70,6 @@ body {
   border-radius: 3px;
 }
 
-/* search text input id */
-#searchInput {
-  margin-top: 10px;
-  width: 18em;
-  height: 20px;
-}
-
 .hidden {
   display: none;
 }
@@ -59,19 +77,6 @@ body {
 #episodeDisplay {
   display: inline;
   padding-left: 15px;
-}
-
-/* select element drop down */
-#episodeDropdown {
-  height: 24px;
-  width: 220px;
-  margin-right: 5em;
-}
-
-#showDropdown {
-  height: 24px;
-  width: 220px;
-  margin-right: 5em;
 }
 
 #copyrightInfo {
