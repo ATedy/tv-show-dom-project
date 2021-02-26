@@ -10,10 +10,10 @@ const episodeDropdown = document.getElementById("episodeDropdown");
 const showDropdown = document.getElementById("showDropdown");
 // all shows are in the allShows Array
 const allShows = getAllShows();
+// global variable that will hold the fetched data from the api
 let episodesList;
-// console.log(allShows.length);
 
-// an async function that returns the fetched promise
+// an async function change the generic url to one Api url using the show_Id provide in the show.js and  returns full Api url of a show
 function showApiDisplayer() {
   let currentShowId = showDropdown.value;
   let tvShowApi = "https://api.tvmaze.com/shows/SHOW_ID/episodes";
@@ -22,60 +22,19 @@ function showApiDisplayer() {
   return currentShowApi;
 }
 
+// Level 400 - Api
+// this function get called with the even on change of the shows dropdown
+// apiUrl will Api of a current show selected in the show dropdown
+// the global variable in here will hold the json data
 async function updateShows() {
-  let url = showApiDisplayer();
-  console.log(url);
-  fetchedPromise = await fetch(url);
-
+  let apiUrl = showApiDisplayer();
+  console.log(apiUrl);
+  fetchedPromise = await fetch(apiUrl);
   episodesList = await fetchedPromise.json();
-
+  // using the global variable we'll make new webpage and episode dropdown when a show is selected
   makePageForEpisodes(episodesList);
-  // searchBar.addEventListener("keyup", (e) =>
-  //   searchEpisode(e, episodesList)
-  // );
   allEpisodesDropdown(episodesList);
 }
-
-// function apiCall() {
-//   showDropdown.addEventListener("change", (e) => {
-//     let currentShowId = showDropdown.value;
-//     let tvShowApi = "https://api.tvmaze.com/shows/SHOW_ID/episodes";
-//     let currentShowApi = tvShowApi.replace("SHOW_ID", currentShowId);
-//     console.log(currentShowApi);
-//     if (e.isTrusted === true) {
-//       console.log("event triggered");
-//       console.log(e.target.value);
-//     }
-//   });
-// }
-
-// async function allEpisodes() {
-//   let fetchedPromise;
-//   // let episodes;
-
-//   showDropdown.addEventListener("change", async () => {
-//     if (showDropdown.value !== 1632) {
-//       let url = showApiDisplayer();
-//       console.log(showApiDisplayer());
-//       fetchedPromise = await fetch(url);
-
-//       episodesList = await fetchedPromise.json();
-
-//       makePageForEpisodes(episodesList);
-//       searchBar.addEventListener("keyup", (e) =>
-//         searchEpisode(e, episodesList)
-//       );
-//       allEpisodesDropdown(episodesList);
-//     }
-//   });
-
-// console.log(fetchedPromise);
-// fetchedPromise = await fetch(showApiDisplayer());
-// episodes = await fetchedPromise.json();
-// console.log(episodes);
-
-// return episodes;
-// }
 
 // Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
@@ -93,8 +52,11 @@ function makePageForEpisodes(episodeList) {
     } else {
       episodeName.innerHTML = ` ${episodeList[i].name} - S0${episodeList[i].season}E${episodeList[i].number}`;
     }
+
     if (episodeList[i].image === null) {
-      episodeImg.src = "";
+      // some of the shows doesn't provide photo, a default photo for them
+      episodeImg.src =
+        "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
     } else {
       episodeImg.src = episodeList[i].image.medium;
     }
@@ -130,10 +92,10 @@ function searchEpisode(e, episodeList) {
   // it will create page with filtered episodes
   makePageForEpisodes(filteredEpisodes);
 
-  //Displaying how many episodes found
+  //Displaying how many episodes found using the global variable episodeList
   let displayedNumbers = filteredEpisodes.length;
   let displayedText = document.getElementById("episodeDisplay");
-  displayedText.innerHTML = `Displaying ${displayedNumbers}/73 episodes`;
+  displayedText.innerHTML = `Displaying ${displayedNumbers}/${episodeList.length} episodes`;
   rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
 
@@ -175,25 +137,25 @@ function displayEpisode(e, episodeList) {
 }
 
 function allShowsDropdown() {
-  // let sortedShows  = allShows.sort(a, b){
-
-  // }
-
-  allShows.sort(function (a, b) {
-    var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+  // sorting the allshows array by show name, it will compare the case -insensitively
+  allShows.sort(function (firstShow, secondShow) {
+    let nameA = firstShow.name.toUpperCase(); // ignore upper and lowercase
+    let nameB = secondShow.name.toUpperCase(); // ignore upper and lowercase
     if (nameA < nameB) {
+      // nameA is smaller
       return -1;
     }
     if (nameA > nameB) {
+      // nameA is bigger
       return 1;
     }
     // names must be equal
     return 0;
   });
 
-  // allShows.sort(function (a, b) {
-  //   return a.id - b.id;
+  // sorting with id
+  // allShows.sort(function (firstShow, secondShow) {
+  //   return firstShow.id - b.secondShow;
   // });
 
   //All-Episodes will be addded as a first option element using the prepend in the dropdown
@@ -208,25 +170,27 @@ function allShowsDropdown() {
   }
 }
 
-allShowsDropdown();
-
-// setup is an async functions that awaits promise from another async function allEpisodes()
+// setup is an async functions and will load on start of the page
 async function setup() {
-  let fetchedPromise = await fetch(showApiDisplayer());
-  episodesList = await fetchedPromise.json();
-  // episodesList = await allEpisodes();
-  showDropdown.addEventListener("change", updateShows);
-  console.log(episodesList);
-  await makePageForEpisodes(episodesList);
-  searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
-  await allEpisodesDropdown(episodesList);
+  // fetching and getting the data will be don here using the first show in the list to make the webpage on loading
+  // all the searchEpisode, allEpisodeDropdown will work just for the first
+  // after the on change event is fired the updateShows function will call these above functions to make a page for the selected show when user selects a show
 
-  //error handling added
-  // try {
+  // try and catch error handling added
+  try {
+    allShowsDropdown();
+    let fetchedPromise = await fetch(showApiDisplayer());
+    episodesList = await fetchedPromise.json();
+    // episodesList = await allEpisodes();
 
-  // } catch (error) {
-  //   console.log(error);
-  // }
+    showDropdown.addEventListener("change", updateShows);
+    console.log(episodesList);
+    makePageForEpisodes(episodesList);
+    searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
+    allEpisodesDropdown(episodesList);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 window.onload = setup;
