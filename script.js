@@ -1,5 +1,6 @@
 //parent Element for the whole body content
 const rootElem = document.getElementById("root");
+rootElem.classList.add("parentElement");
 // searchInput the input field
 const searchBar = document.getElementById("searchInput");
 //episode container div of each episode
@@ -178,13 +179,26 @@ function allShowsDropdown() {
 function allShowsInfoDisplayer() {
   if (showDropdown.value == "allShows") {
     rootElem.innerHTML = "";
+    rootElem.classList.remove("parentElement");
+    rootElem.classList.add("allShowContainer");
 
     for (let i = 0; i < allShows.length; i++) {
       let oneShowContainer = document.createElement("div");
-      oneShowContainer.className = "showContainer";
+      oneShowContainer.classList.add("oneShowContainer");
       let showName = document.createElement("h4");
+      //div container all the info in each show
+      let showInfoContainer = document.createElement("div");
+      showInfoContainer.classList.add("showInfoContainer");
       let showImg = document.createElement("img");
       let showSummary = document.createElement("p");
+      //showStatus contains the rating, genre, runtime
+      let statusContainer = document.createElement("div");
+      statusContainer.classList.add("statusContainer");
+
+      let showRated = document.createElement("h4");
+      let showGenres = document.createElement("h4");
+      let showStatus = document.createElement("h4");
+      let showRuntime = document.createElement("h4");
 
       showName.innerHTML = allShows[i].name;
 
@@ -197,11 +211,24 @@ function allShowsInfoDisplayer() {
       }
 
       showSummary.innerHTML = allShows[i].summary;
+      showRated.innerHTML = `Rated: ${allShows[i].rating.average}`;
+      showGenres.innerHTML = allShows[i].genres;
+      showStatus.innerHTML = allShows[i].status;
+      showRuntime.innerHTML = allShows[i].runtime;
 
       // appending elements of each episode
+      statusContainer.append(showRated);
+      statusContainer.append(showGenres);
+      statusContainer.append(showStatus);
+      statusContainer.append(showRuntime);
+
+      showInfoContainer.appendChild(showImg);
+      showInfoContainer.appendChild(showSummary);
+      showInfoContainer.appendChild(statusContainer);
+
       oneShowContainer.appendChild(showName);
-      oneShowContainer.appendChild(showImg);
-      oneShowContainer.appendChild(showSummary);
+      oneShowContainer.appendChild(showInfoContainer);
+
       rootElem.appendChild(oneShowContainer);
     }
   }

@@ -6,7 +6,7 @@ body {
 }
 
 /* main div container */
-#root {
+.parentElement {
   box-sizing: border-box;
   background-color: #d9dadb;
   display: grid;
@@ -79,9 +79,30 @@ body {
   padding-left: 15px;
 }
 
-.showContainer {
+.allShowContainer {
   width: 100%;
   display: flex;
+  flex-direction: column;
+}
+.showInfoContainer {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+}
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+.showInfoContainer > p {
+  font-size: 1.2rem;
+  text-align: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.oneShowContainer {
+  width: 100%;
   background-color: #f2f3f5;
   border-radius: 2px;
 }
