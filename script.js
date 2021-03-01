@@ -168,12 +168,49 @@ function allShowsDropdown() {
     // console.log(oneShowDropdown.value);
     showDropdown.appendChild(oneShowDropdown);
   }
+
+  let firstShowOption = document.createElement("option");
+  firstShowOption.value = "allShows";
+  firstShowOption.innerHTML = "All-Shows";
+  showDropdown.prepend(firstShowOption);
+}
+
+function allShowsInfoDisplayer() {
+  if (showDropdown.value == "allShows") {
+    rootElem.innerHTML = "";
+
+    for (let i = 0; i < allShows.length; i++) {
+      let oneShowContainer = document.createElement("div");
+      oneShowContainer.className = "showContainer";
+      let showName = document.createElement("h4");
+      let showImg = document.createElement("img");
+      let showSummary = document.createElement("p");
+
+      showName.innerHTML = allShows[i].name;
+
+      if (allShows[i].image === null) {
+        // some of the shows doesn't provide photo, a default photo for them
+        showImg.src =
+          "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
+      } else {
+        showImg.src = allShows[i].image.medium;
+      }
+
+      showSummary.innerHTML = allShows[i].summary;
+
+      // appending elements of each episode
+      oneShowContainer.appendChild(showName);
+      oneShowContainer.appendChild(showImg);
+      oneShowContainer.appendChild(showSummary);
+      rootElem.appendChild(oneShowContainer);
+    }
+  }
 }
 
 // setup is an async functions and will load on start of the page
 async function setup() {
-  // fetching and getting the data will be don here using the first show in the list to make the webpage on loading
-  // all the searchEpisode, allEpisodeDropdown will work just for the first
+  // fetching and getting the data will be done here using the first show in the list to make the webpage on loading
+  // all the searchEpisode, allEpisodeDropdown will work just for the first show in the list
   // after the on change event is fired the updateShows function will call these above functions to make a page for the selected show when user selects a show
 
   // try and catch error handling added
@@ -184,6 +221,7 @@ async function setup() {
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
+    showDropdown.addEventListener("change", allShowsInfoDisplayer);
     console.log(episodesList);
     makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
