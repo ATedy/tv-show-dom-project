@@ -9,6 +9,8 @@ const episodeContainer = document.getElementsByClassName("episodeContainer");
 const episodeDropdown = document.getElementById("episodeDropdown");
 // showDropdown the select tag id
 const showDropdown = document.getElementById("showDropdown");
+// showSearch Input the select tag id
+const showSearchInput = document.getElementById("showSearch");
 // all shows are in the allShows Array
 const allShows = getAllShows();
 // global variable that will hold the fetched data from the api
@@ -39,7 +41,9 @@ async function updateShows() {
 
 // Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
+  searchBar.style.display = "inline";
   rootElem.innerHTML = "";
+  showSearchInput.style.display = "none";
   for (let i = 0; i < episodeList.length; i++) {
     let episodeContainer = document.createElement("div");
     episodeContainer.className = "episodeContainer";
@@ -177,6 +181,9 @@ function allShowsDropdown() {
 }
 
 function allShowsInfoDisplayer() {
+  showSearchInput.style.display = "inline";
+  searchBar.style.display = "none";
+  episodeDisplay.innerHTML = "Displaying All shows";
   if (showDropdown.value == "allShows") {
     rootElem.innerHTML = "";
     rootElem.classList.remove("parentElement");
@@ -207,7 +214,7 @@ function allShowsInfoDisplayer() {
         showImg.src =
           "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
       } else {
-        showImg.src = allShows[i].image.medium;
+        showImg.src = allShows[i].image.original;
       }
 
       showSummary.innerHTML = allShows[i].summary;
