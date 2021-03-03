@@ -9,6 +9,8 @@ const episodeContainer = document.getElementsByClassName("episodeContainer");
 const episodeDropdown = document.getElementById("episodeDropdown");
 // showDropdown the select tag id
 const showDropdown = document.getElementById("showDropdown");
+
+let oneShowContainer;
 // showSearch Input the select tag id
 const showSearchInput = document.getElementById("showSearch");
 // all shows are in the allShows Array
@@ -43,6 +45,8 @@ async function updateShows() {
 function makePageForEpisodes(episodeList) {
   searchBar.style.display = "inline";
   rootElem.innerHTML = "";
+  rootElem.classList.add("parentElement");
+  rootElem.classList.remove("allShowContainer");
   showSearchInput.style.display = "none";
   for (let i = 0; i < episodeList.length; i++) {
     let episodeContainer = document.createElement("div");
@@ -141,6 +145,8 @@ function displayEpisode(e, episodeList) {
   }
 }
 
+//for the shows
+
 function allShowsDropdown() {
   // sorting the allshows array by show name, it will compare the case -insensitively
   allShows.sort(function (firstShow, secondShow) {
@@ -190,7 +196,7 @@ function allShowsInfoDisplayer() {
     rootElem.classList.add("allShowContainer");
 
     for (let i = 0; i < allShows.length; i++) {
-      let oneShowContainer = document.createElement("div");
+      oneShowContainer = document.createElement("div");
       oneShowContainer.classList.add("oneShowContainer");
       let showName = document.createElement("h4");
       //div container all the info in each show
@@ -214,7 +220,7 @@ function allShowsInfoDisplayer() {
         showImg.src =
           "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
       } else {
-        showImg.src = allShows[i].image.original;
+        showImg.src = allShows[i].image.medium;
       }
 
       showSummary.innerHTML = allShows[i].summary;
@@ -241,6 +247,33 @@ function allShowsInfoDisplayer() {
   }
 }
 
+function searchShow(e, allShows) {
+  // catches the user input value from the input field and lowercase it
+  let searchValue = e.target.value.toLowerCase();
+  const filteredShows = [];
+  //filters the episodes and push the to the filtered array
+  allShows.forEach((show) => {
+    if (
+      show.name.toLowerCase().includes(searchValue) === true ||
+      show.summary.toLowerCase().includes(searchValue) === true
+    ) {
+      filteredShows.push(show);
+    } else {
+      for (let i = 0; i < oneShowContainer.length; i++) {
+        oneShowContainer[i].classList.add("hidden");
+      }
+    }
+  });
+  // it will create page with filtered episodes
+  allShowsInfoDisplayer(filteredShows);
+
+  //Displaying how many episodes found using the global variable episodeList
+  // let displayedNumbers = filteredShows.length;
+  // let displayedText = document.getElementById("episodeDisplay");
+  // displayedText.innerHTML = `Displaying ${displayedNumbers}/${episodeList.length} episodes`;
+  // rootElem.insertAdjacentElement("beforebegin", displayedText);
+}
+
 // setup is an async functions and will load on start of the page
 async function setup() {
   // fetching and getting the data will be done here using the first show in the list to make the webpage on loading
@@ -259,6 +292,7 @@ async function setup() {
     console.log(episodesList);
     makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
+    showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
     allEpisodesDropdown(episodesList);
   } catch (error) {
     console.log(error);
