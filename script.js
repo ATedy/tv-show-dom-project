@@ -34,13 +34,17 @@ function showApiDisplayer() {
 // apiUrl will Api of a current show selected in the show dropdown
 // the global variable in here will hold the json data
 async function updateShows() {
-  let apiUrl = showApiDisplayer();
+  if (showDropdown.value !== "allShows") {
+    let apiUrl = showApiDisplayer();
 
-  fetchedPromise = await fetch(apiUrl);
-  episodesList = await fetchedPromise.json();
-  // using the global variable we'll make new webpage and episode dropdown when a show is selected
-  makePageForEpisodes(episodesList);
-  allEpisodesDropdown(episodesList);
+    fetchedPromise = await fetch(apiUrl);
+    episodesList = await fetchedPromise.json();
+    // using the global variable we'll make new webpage and episode dropdown when a show is selected
+    makePageForEpisodes(episodesList);
+    allEpisodesDropdown(episodesList);
+  } else {
+    makeAllShowsPage(allShows);
+  }
 }
 
 // Level100 showing all the episodes on the page
@@ -96,10 +100,6 @@ function searchEpisode(e, episodeList) {
       episode.summary.toLowerCase().includes(searchValue) === true
     ) {
       filteredEpisodes.push(episode);
-    } else {
-      for (let i = 0; i < episodeContainer.length; i++) {
-        episodeContainer[i].classList.add("hidden");
-      }
     }
   });
   // it will create page with filtered episodes
@@ -113,19 +113,39 @@ function searchEpisode(e, episodeList) {
 
 //Level-300 Episode dropdown - displaying and selecting episode from the dropdown
 
+/*
+ * Role - To add leading zeroes to a number
+ * Parameter - Takes 2 parameters
+ *  num - the number to which leading zeroes are to be added
+ *  places - the number of digits the final result should have
+ * Returns - A string containing the num with added leading zeroes to it.
+ * Result - zeroPad(5, 3) gives the result as "005"
+ */
+function zeroPad(num, places) {
+  // calculate the number of zeroes that need to be prepended to num
+  let zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
 function allEpisodesDropdown(episodeList) {
   episodeDropdown.innerHTML = "";
   for (let i = 0; i < episodeList.length; i++) {
     let oneEpisodeDropdown = document.createElement("option");
     // each option element is getting index of the allEpisodes array as its value
     oneEpisodeDropdown.value = i;
-    if (episodeList[i].number < 10) {
-      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
-    } else {
-      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
-    }
+    oneEpisodeDropdown.innerHTML = `S${zeroPad(
+      episodeList[i].season,
+      2
+    )} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
+
+    // if (episodeList[i].number < 10) {
+    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
+    // } else {
+    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
+    // }
     episodeDropdown.appendChild(oneEpisodeDropdown);
   }
+
   //All-Episodes will be addded as a first option element using the prepend in the dropdown
   let firstOption = document.createElement("option");
   firstOption.value = "allEpisodes";
@@ -254,6 +274,33 @@ function makeAllShowsPage(showList) {
     rootElem.appendChild(oneShowContainer);
   }
 }
+function searchShow(e) {
+  // catches the user input value from the input field and lowercase it
+  let searchValue = e.target.value.toLowerCase();
+  const filteredShow = [];
+  //filters the episodes and push the to the filtered array
+  allShows.forEach((show) => {
+    let isFoundInGenre = show.genres.some((genre) => {
+      return genre.toLowerCase().includes(searchValue);
+    });
+    // console.log(show.genres);
+
+    if (
+      show.name.toLowerCase().includes(searchValue) === true ||
+      show.summary.toLowerCase().includes(searchValue) === true ||
+      isFoundInGenre
+    ) {
+      filteredShow.push(show);
+    }
+  });
+  // it will create page with filtered episodes
+  makeAllShowsPage(filteredShow);
+
+  //Displaying how many episodes found using the global variable episodeList
+  let displayedNumbers = filteredShow.length;
+  displayedText.innerHTML = `Displaying ${displayedNumbers}/${allShows.length} shows`;
+  rootElem.insertAdjacentElement("beforebegin", displayedText);
+}
 
 // setup is an async functions and will load on start of the page
 async function setup() {
@@ -275,7 +322,7 @@ async function setup() {
 
     // makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
-    // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
+    showSearchInput.addEventListener("keyup", searchShow);
     allEpisodesDropdown(episodesList);
   } catch (error) {
     console.log(error);
