@@ -34,6 +34,7 @@ function showApiDisplayer() {
 // apiUrl will Api of a current show selected in the show dropdown
 // the global variable in here will hold the json data
 async function updateShows() {
+  // fetch won't give error in the dropdown
   if (showDropdown.value !== "allShows") {
     let apiUrl = showApiDisplayer();
 
