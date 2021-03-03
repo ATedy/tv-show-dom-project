@@ -10,8 +10,15 @@
 
   <body>
     <h1 id="heading">TV - Shows</h1>
+
     <select name="shows" id="showDropdown"> </select>
     <select name="episodes" id="episodeDropdown"> </select>
+    <input
+      id="showSearch"
+      type="text"
+      name="search"
+      placeholder="Search Show Here"
+    />
     <input
       id="searchInput"
       type="text"
@@ -19,7 +26,7 @@
       placeholder="Search Episode Here"
     />
     <h4 id="episodeDisplay">Displaying All episodes</h4>
-    <div id="root"></div>
+    <div id="root" class="parentElement"></div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
@@ -30,7 +37,7 @@
     <script src="script.js"></script>
     <footer id="copyrightInfo">
       <h5>
-        This is only for educational purposes only. This data is property of
+        This is for educational purposes only. This data is property of
         <a href="https://www.tvmaze.com/" target="_blank">TVMaze.com</a>
       </h5>
     </footer>

@@ -1,12 +1,15 @@
 body {
   background-color: #d9dadb;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 #heading {
   text-align: center;
 }
 
 /* main div container */
-#root {
+.parentElement {
   box-sizing: border-box;
   background-color: #d9dadb;
   display: grid;
@@ -77,6 +80,54 @@ body {
 #episodeDisplay {
   display: inline;
   padding-left: 15px;
+}
+
+.allShowContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.oneShowContainer {
+  width: 80%;
+  margin: 15px 0;
+  padding: 15px;
+
+  background-color: #f2f3f5;
+  border-radius: 2px;
+}
+.oneShowContainer img {
+  border-radius: 2px;
+  padding-bottom: 10px;
+  padding-top: 0;
+}
+.showInfoContainer {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  padding: 0 15px 0 15px;
+}
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  padding-left: 10px;
+  font-size: 1.2rem;
+}
+.showInfoContainer > p {
+  font-size: 1.4rem;
+  text-align: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.oneShowContainer h3 {
+  display: inline-block;
+  padding: 3px;
+  justify-self: center;
+  font-size: 2rem;
 }
 
 #copyrightInfo {

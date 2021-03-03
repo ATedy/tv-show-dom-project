@@ -1,13 +1,20 @@
 //parent Element for the whole body content
 const rootElem = document.getElementById("root");
+rootElem.classList.add("parentElement");
 // searchInput the input field
 const searchBar = document.getElementById("searchInput");
+
+let displayedText = document.getElementById("episodeDisplay");
 //episode container div of each episode
 const episodeContainer = document.getElementsByClassName("episodeContainer");
 // episodeDropdown the select tag id
 const episodeDropdown = document.getElementById("episodeDropdown");
 // showDropdown the select tag id
 const showDropdown = document.getElementById("showDropdown");
+
+let oneShowContainer;
+// showSearch Input the select tag id
+const showSearchInput = document.getElementById("showSearch");
 // all shows are in the allShows Array
 const allShows = getAllShows();
 // global variable that will hold the fetched data from the api
@@ -28,7 +35,7 @@ function showApiDisplayer() {
 // the global variable in here will hold the json data
 async function updateShows() {
   let apiUrl = showApiDisplayer();
-  console.log(apiUrl);
+
   fetchedPromise = await fetch(apiUrl);
   episodesList = await fetchedPromise.json();
   // using the global variable we'll make new webpage and episode dropdown when a show is selected
@@ -38,7 +45,13 @@ async function updateShows() {
 
 // Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
+  displayedText.innerHTML = "";
+  searchBar.style.display = "inline";
+  episodeDropdown.style.display = "inline";
   rootElem.innerHTML = "";
+  rootElem.classList.add("parentElement");
+  rootElem.classList.remove("allShowContainer");
+  showSearchInput.style.display = "none";
   for (let i = 0; i < episodeList.length; i++) {
     let episodeContainer = document.createElement("div");
     episodeContainer.className = "episodeContainer";
@@ -94,7 +107,6 @@ function searchEpisode(e, episodeList) {
 
   //Displaying how many episodes found using the global variable episodeList
   let displayedNumbers = filteredEpisodes.length;
-  let displayedText = document.getElementById("episodeDisplay");
   displayedText.innerHTML = `Displaying ${displayedNumbers}/${episodeList.length} episodes`;
   rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
@@ -136,6 +148,8 @@ function displayEpisode(e, episodeList) {
   }
 }
 
+//for the shows
+
 function allShowsDropdown() {
   // sorting the allshows array by show name, it will compare the case -insensitively
   allShows.sort(function (firstShow, secondShow) {
@@ -168,12 +182,80 @@ function allShowsDropdown() {
     // console.log(oneShowDropdown.value);
     showDropdown.appendChild(oneShowDropdown);
   }
+
+  let firstShowOption = document.createElement("option");
+  firstShowOption.value = "allShows";
+  firstShowOption.innerHTML = "All-Shows";
+  showDropdown.prepend(firstShowOption);
+}
+
+function makeAllShowsPage() {
+  showSearchInput.style.display = "inline";
+  searchBar.style.display = "none";
+  episodeDropdown.style.display = "none";
+  episodeDisplay.innerHTML = "Displaying All shows";
+
+  if (showDropdown.value == "allShows") {
+    rootElem.innerHTML = "";
+    rootElem.classList.remove("parentElement");
+    rootElem.classList.add("allShowContainer");
+
+    for (let i = 0; i < allShows.length; i++) {
+      oneShowContainer = document.createElement("div");
+      oneShowContainer.classList.add("oneShowContainer");
+      let showName = document.createElement("h3");
+      //div container all the info in each show
+      let showInfoContainer = document.createElement("div");
+      showInfoContainer.classList.add("showInfoContainer");
+      let showImg = document.createElement("img");
+      let showSummary = document.createElement("p");
+      //showStatus contains the rating, genre, runtime
+      let statusContainer = document.createElement("div");
+      statusContainer.classList.add("statusContainer");
+
+      let showRated = document.createElement("h4");
+      let showGenres = document.createElement("h4");
+      let showStatus = document.createElement("h4");
+      let showRuntime = document.createElement("h4");
+
+      showName.innerHTML = allShows[i].name;
+
+      if (allShows[i].image === null) {
+        // some of the shows doesn't provide photo, a default photo for them
+        showImg.src =
+          "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
+      } else {
+        showImg.src = allShows[i].image.medium;
+      }
+
+      showSummary.innerHTML = allShows[i].summary;
+      showRated.innerHTML = `Rated: ${allShows[i].rating.average}`;
+      showGenres.innerHTML = allShows[i].genres;
+      showStatus.innerHTML = `Status: ${allShows[i].status}`;
+      showRuntime.innerHTML = `Runtime: ${allShows[i].runtime}`;
+
+      // appending elements of each episode
+      statusContainer.append(showRated);
+      statusContainer.append(showGenres);
+      statusContainer.append(showStatus);
+      statusContainer.append(showRuntime);
+
+      showInfoContainer.appendChild(showImg);
+      showInfoContainer.appendChild(showSummary);
+      showInfoContainer.appendChild(statusContainer);
+
+      oneShowContainer.appendChild(showName);
+      oneShowContainer.appendChild(showInfoContainer);
+
+      rootElem.appendChild(oneShowContainer);
+    }
+  }
 }
 
 // setup is an async functions and will load on start of the page
 async function setup() {
-  // fetching and getting the data will be don here using the first show in the list to make the webpage on loading
-  // all the searchEpisode, allEpisodeDropdown will work just for the first
+  // fetching and getting the data will be done here using the first show in the list to make the webpage on loading
+  // all the searchEpisode, allEpisodeDropdown will work just for the first show in the list
   // after the on change event is fired the updateShows function will call these above functions to make a page for the selected show when user selects a show
 
   // try and catch error handling added
@@ -184,9 +266,10 @@ async function setup() {
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    console.log(episodesList);
+    showDropdown.addEventListener("change", makeAllShowsPage);
     makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
+    // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
     allEpisodesDropdown(episodesList);
   } catch (error) {
     console.log(error);
