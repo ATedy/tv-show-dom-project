@@ -189,11 +189,12 @@ function allShowsDropdown() {
   showDropdown.prepend(firstShowOption);
 }
 
-function allShowsPageDisplayer() {
+function makeAllShowsPage() {
   showSearchInput.style.display = "inline";
   searchBar.style.display = "none";
   episodeDropdown.style.display = "none";
   episodeDisplay.innerHTML = "Displaying All shows";
+
   if (showDropdown.value == "allShows") {
     rootElem.innerHTML = "";
     rootElem.classList.remove("parentElement");
@@ -230,8 +231,8 @@ function allShowsPageDisplayer() {
       showSummary.innerHTML = allShows[i].summary;
       showRated.innerHTML = `Rated: ${allShows[i].rating.average}`;
       showGenres.innerHTML = allShows[i].genres;
-      showStatus.innerHTML = allShows[i].status;
-      showRuntime.innerHTML = allShows[i].runtime;
+      showStatus.innerHTML = `Status: ${allShows[i].status}`;
+      showRuntime.innerHTML = `Runtime: ${allShows[i].runtime}`;
 
       // appending elements of each episode
       statusContainer.append(showRated);
@@ -265,7 +266,7 @@ async function setup() {
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    showDropdown.addEventListener("change", allShowsPageDisplayer);
+    showDropdown.addEventListener("change", makeAllShowsPage);
     makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
     // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
