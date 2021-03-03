@@ -3,6 +3,8 @@ const rootElem = document.getElementById("root");
 rootElem.classList.add("parentElement");
 // searchInput the input field
 const searchBar = document.getElementById("searchInput");
+
+let displayedText = document.getElementById("episodeDisplay");
 //episode container div of each episode
 const episodeContainer = document.getElementsByClassName("episodeContainer");
 // episodeDropdown the select tag id
@@ -33,7 +35,7 @@ function showApiDisplayer() {
 // the global variable in here will hold the json data
 async function updateShows() {
   let apiUrl = showApiDisplayer();
-  console.log(apiUrl);
+
   fetchedPromise = await fetch(apiUrl);
   episodesList = await fetchedPromise.json();
   // using the global variable we'll make new webpage and episode dropdown when a show is selected
@@ -43,7 +45,9 @@ async function updateShows() {
 
 // Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
+  displayedText.innerHTML = "";
   searchBar.style.display = "inline";
+  episodeDropdown.style.display = "inline";
   rootElem.innerHTML = "";
   rootElem.classList.add("parentElement");
   rootElem.classList.remove("allShowContainer");
@@ -103,7 +107,6 @@ function searchEpisode(e, episodeList) {
 
   //Displaying how many episodes found using the global variable episodeList
   let displayedNumbers = filteredEpisodes.length;
-  let displayedText = document.getElementById("episodeDisplay");
   displayedText.innerHTML = `Displaying ${displayedNumbers}/${episodeList.length} episodes`;
   rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
@@ -186,9 +189,10 @@ function allShowsDropdown() {
   showDropdown.prepend(firstShowOption);
 }
 
-function allShowsInfoDisplayer() {
+function allShowsPageDisplayer() {
   showSearchInput.style.display = "inline";
   searchBar.style.display = "none";
+  episodeDropdown.style.display = "none";
   episodeDisplay.innerHTML = "Displaying All shows";
   if (showDropdown.value == "allShows") {
     rootElem.innerHTML = "";
@@ -198,7 +202,7 @@ function allShowsInfoDisplayer() {
     for (let i = 0; i < allShows.length; i++) {
       oneShowContainer = document.createElement("div");
       oneShowContainer.classList.add("oneShowContainer");
-      let showName = document.createElement("h4");
+      let showName = document.createElement("h3");
       //div container all the info in each show
       let showInfoContainer = document.createElement("div");
       showInfoContainer.classList.add("showInfoContainer");
@@ -247,33 +251,6 @@ function allShowsInfoDisplayer() {
   }
 }
 
-function searchShow(e, allShows) {
-  // catches the user input value from the input field and lowercase it
-  let searchValue = e.target.value.toLowerCase();
-  const filteredShows = [];
-  //filters the episodes and push the to the filtered array
-  allShows.forEach((show) => {
-    if (
-      show.name.toLowerCase().includes(searchValue) === true ||
-      show.summary.toLowerCase().includes(searchValue) === true
-    ) {
-      filteredShows.push(show);
-    } else {
-      for (let i = 0; i < oneShowContainer.length; i++) {
-        oneShowContainer[i].classList.add("hidden");
-      }
-    }
-  });
-  // it will create page with filtered episodes
-  allShowsInfoDisplayer(filteredShows);
-
-  //Displaying how many episodes found using the global variable episodeList
-  // let displayedNumbers = filteredShows.length;
-  // let displayedText = document.getElementById("episodeDisplay");
-  // displayedText.innerHTML = `Displaying ${displayedNumbers}/${episodeList.length} episodes`;
-  // rootElem.insertAdjacentElement("beforebegin", displayedText);
-}
-
 // setup is an async functions and will load on start of the page
 async function setup() {
   // fetching and getting the data will be done here using the first show in the list to make the webpage on loading
@@ -288,11 +265,10 @@ async function setup() {
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    showDropdown.addEventListener("change", allShowsInfoDisplayer);
-    console.log(episodesList);
+    showDropdown.addEventListener("change", allShowsPageDisplayer);
     makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
-    showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
+    // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
     allEpisodesDropdown(episodesList);
   } catch (error) {
     console.log(error);

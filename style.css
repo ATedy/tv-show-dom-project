@@ -1,5 +1,8 @@
 body {
   background-color: #d9dadb;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 #heading {
   text-align: center;
@@ -86,10 +89,25 @@ body {
   justify-content: center;
   flex-direction: column;
 }
+
+.oneShowContainer {
+  width: 80%;
+  margin: 15px 0;
+  padding: 15px;
+
+  background-color: #f2f3f5;
+  border-radius: 2px;
+}
+.oneShowContainer img {
+  border-radius: 2px;
+  padding-bottom: 10px;
+  padding-top: 0;
+}
 .showInfoContainer {
   display: flex;
   flex-direction: row;
   margin-left: 20px;
+  padding: 0 15px 0 15px;
 }
 .statusContainer {
   display: flex;
@@ -103,10 +121,11 @@ body {
   padding-right: 30px;
 }
 
-.oneShowContainer {
-  width: 100%;
-  background-color: #f2f3f5;
-  border-radius: 2px;
+.oneShowContainer h3 {
+  display: inline-block;
+  padding: 3px;
+  justify-self: center;
+  font-size: 2rem;
 }
 
 #copyrightInfo {
