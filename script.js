@@ -34,13 +34,18 @@ function showApiDisplayer() {
 // apiUrl will Api of a current show selected in the show dropdown
 // the global variable in here will hold the json data
 async function updateShows() {
-  let apiUrl = showApiDisplayer();
+  // fetch won't give error in the dropdown
+  if (showDropdown.value !== "allShows") {
+    let apiUrl = showApiDisplayer();
 
-  fetchedPromise = await fetch(apiUrl);
-  episodesList = await fetchedPromise.json();
-  // using the global variable we'll make new webpage and episode dropdown when a show is selected
-  makePageForEpisodes(episodesList);
-  allEpisodesDropdown(episodesList);
+    fetchedPromise = await fetch(apiUrl);
+    episodesList = await fetchedPromise.json();
+    // using the global variable we'll make new webpage and episode dropdown when a show is selected
+    makePageForEpisodes(episodesList);
+    allEpisodesDropdown(episodesList);
+  } else {
+    makeAllShowsPage(allShows);
+  }
 }
 
 // Level100 showing all the episodes on the page
@@ -96,10 +101,6 @@ function searchEpisode(e, episodeList) {
       episode.summary.toLowerCase().includes(searchValue) === true
     ) {
       filteredEpisodes.push(episode);
-    } else {
-      for (let i = 0; i < episodeContainer.length; i++) {
-        episodeContainer[i].classList.add("hidden");
-      }
     }
   });
   // it will create page with filtered episodes
@@ -113,19 +114,39 @@ function searchEpisode(e, episodeList) {
 
 //Level-300 Episode dropdown - displaying and selecting episode from the dropdown
 
+/*
+ * Role - To add leading zeroes to a number
+ * Parameter - Takes 2 parameters
+ *  num - the number to which leading zeroes are to be added
+ *  places - the number of digits the final result should have
+ * Returns - A string containing the num with added leading zeroes to it.
+ * Result - zeroPad(5, 3) gives the result as "005"
+ */
+function zeroPad(num, places) {
+  // calculate the number of zeroes that need to be prepended to num
+  let zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+
 function allEpisodesDropdown(episodeList) {
   episodeDropdown.innerHTML = "";
   for (let i = 0; i < episodeList.length; i++) {
     let oneEpisodeDropdown = document.createElement("option");
     // each option element is getting index of the allEpisodes array as its value
     oneEpisodeDropdown.value = i;
-    if (episodeList[i].number < 10) {
-      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
-    } else {
-      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
-    }
+    oneEpisodeDropdown.innerHTML = `S${zeroPad(
+      episodeList[i].season,
+      2
+    )} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
+
+    // if (episodeList[i].number < 10) {
+    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
+    // } else {
+    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
+    // }
     episodeDropdown.appendChild(oneEpisodeDropdown);
   }
+
   //All-Episodes will be addded as a first option element using the prepend in the dropdown
   let firstOption = document.createElement("option");
   firstOption.value = "allEpisodes";
@@ -188,68 +209,98 @@ function allShowsDropdown() {
   firstShowOption.innerHTML = "All-Shows";
   showDropdown.prepend(firstShowOption);
 }
+function displayShow() {
+  if (showDropdown.value == "allShows") {
+    makeAllShowsPage();
+  }
+}
 
-function makeAllShowsPage() {
+function makeAllShowsPage(showList) {
   showSearchInput.style.display = "inline";
   searchBar.style.display = "none";
   episodeDropdown.style.display = "none";
   episodeDisplay.innerHTML = "Displaying All shows";
 
-  if (showDropdown.value == "allShows") {
-    rootElem.innerHTML = "";
-    rootElem.classList.remove("parentElement");
-    rootElem.classList.add("allShowContainer");
+  rootElem.innerHTML = "";
+  rootElem.classList.remove("parentElement");
+  rootElem.classList.add("allShowContainer");
 
-    for (let i = 0; i < allShows.length; i++) {
-      oneShowContainer = document.createElement("div");
-      oneShowContainer.classList.add("oneShowContainer");
-      let showName = document.createElement("h3");
-      //div container all the info in each show
-      let showInfoContainer = document.createElement("div");
-      showInfoContainer.classList.add("showInfoContainer");
-      let showImg = document.createElement("img");
-      let showSummary = document.createElement("p");
-      //showStatus contains the rating, genre, runtime
-      let statusContainer = document.createElement("div");
-      statusContainer.classList.add("statusContainer");
+  for (let i = 0; i < showList.length; i++) {
+    oneShowContainer = document.createElement("div");
+    oneShowContainer.classList.add("oneShowContainer");
+    let showName = document.createElement("h3");
+    //div container all the info in each show
+    let showInfoContainer = document.createElement("div");
+    showInfoContainer.classList.add("showInfoContainer");
+    let showImg = document.createElement("img");
+    let showSummary = document.createElement("p");
+    //showStatus contains the rating, genre, runtime
+    let statusContainer = document.createElement("div");
+    statusContainer.classList.add("statusContainer");
 
-      let showRated = document.createElement("h4");
-      let showGenres = document.createElement("h4");
-      let showStatus = document.createElement("h4");
-      let showRuntime = document.createElement("h4");
+    let showRated = document.createElement("h4");
+    let showGenres = document.createElement("h4");
+    let showStatus = document.createElement("h4");
+    let showRuntime = document.createElement("h4");
 
-      showName.innerHTML = allShows[i].name;
+    showName.innerHTML = showList[i].name;
 
-      if (allShows[i].image === null) {
-        // some of the shows doesn't provide photo, a default photo for them
-        showImg.src =
-          "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
-      } else {
-        showImg.src = allShows[i].image.medium;
-      }
-
-      showSummary.innerHTML = allShows[i].summary;
-      showRated.innerHTML = `Rated: ${allShows[i].rating.average}`;
-      showGenres.innerHTML = allShows[i].genres;
-      showStatus.innerHTML = `Status: ${allShows[i].status}`;
-      showRuntime.innerHTML = `Runtime: ${allShows[i].runtime}`;
-
-      // appending elements of each episode
-      statusContainer.append(showRated);
-      statusContainer.append(showGenres);
-      statusContainer.append(showStatus);
-      statusContainer.append(showRuntime);
-
-      showInfoContainer.appendChild(showImg);
-      showInfoContainer.appendChild(showSummary);
-      showInfoContainer.appendChild(statusContainer);
-
-      oneShowContainer.appendChild(showName);
-      oneShowContainer.appendChild(showInfoContainer);
-
-      rootElem.appendChild(oneShowContainer);
+    if (showList[i].image === null) {
+      // some of the shows doesn't provide photo, a default photo for them
+      showImg.src =
+        "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
+    } else {
+      showImg.src = showList[i].image.medium;
     }
+
+    showSummary.innerHTML = showList[i].summary;
+    showRated.innerHTML = `Rated: ${showList[i].rating.average}`;
+    showGenres.innerHTML = showList[i].genres;
+    showStatus.innerHTML = `Status: ${showList[i].status}`;
+    showRuntime.innerHTML = `Runtime: ${showList[i].runtime}`;
+
+    // appending elements of each episode
+    statusContainer.append(showRated);
+    statusContainer.append(showGenres);
+    statusContainer.append(showStatus);
+    statusContainer.append(showRuntime);
+
+    showInfoContainer.appendChild(showImg);
+    showInfoContainer.appendChild(showSummary);
+    showInfoContainer.appendChild(statusContainer);
+
+    oneShowContainer.appendChild(showName);
+    oneShowContainer.appendChild(showInfoContainer);
+
+    rootElem.appendChild(oneShowContainer);
   }
+}
+function searchShow(e) {
+  // catches the user input value from the input field and lowercase it
+  let searchValue = e.target.value.toLowerCase();
+  const filteredShow = [];
+  //filters the episodes and push the to the filtered array
+  allShows.forEach((show) => {
+    let isFoundInGenre = show.genres.some((genre) => {
+      return genre.toLowerCase().includes(searchValue);
+    });
+    // console.log(show.genres);
+
+    if (
+      show.name.toLowerCase().includes(searchValue) === true ||
+      show.summary.toLowerCase().includes(searchValue) === true ||
+      isFoundInGenre
+    ) {
+      filteredShow.push(show);
+    }
+  });
+  // it will create page with filtered episodes
+  makeAllShowsPage(filteredShow);
+
+  //Displaying how many episodes found using the global variable episodeList
+  let displayedNumbers = filteredShow.length;
+  displayedText.innerHTML = `Displaying ${displayedNumbers}/${allShows.length} shows`;
+  rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
 
 // setup is an async functions and will load on start of the page
@@ -261,15 +312,18 @@ async function setup() {
   // try and catch error handling added
   try {
     allShowsDropdown();
+    makeAllShowsPage(allShows);
+
     let fetchedPromise = await fetch(showApiDisplayer());
     episodesList = await fetchedPromise.json();
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    showDropdown.addEventListener("change", makeAllShowsPage);
-    makePageForEpisodes(episodesList);
+    // showDropdown.addEventListener("change", makeAllShowsPage);
+
+    // makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
-    // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
+    showSearchInput.addEventListener("keyup", searchShow);
     allEpisodesDropdown(episodesList);
   } catch (error) {
     console.log(error);
@@ -282,3 +336,15 @@ window.onload = setup;
 // episodeDropdown.addEventListener("mouseover", (e) => {
 //   document.location.reload(true);
 //
+
+// let innerHTML = `<h2 class="episodeTitle">${episode.name}
+//     <span class="episodeCode">
+//     S${zeroPad(episode.season, 2)} E${zeroPad(episode.number, 2)}
+//     </span>
+//     </h2>
+//     <hr>
+//     <img src="${imgSrc}">
+//     <h3 class="summaryTitle">Summary:</h3>
+//     <div class="summaryText">${episode.summary}</div>
+//     <a class="episodeLink" href=${episode.url} target="_blank">More...</a>`;
+//   episodeBlock.innerHTML = innerHTML;
