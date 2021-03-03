@@ -188,67 +188,70 @@ function allShowsDropdown() {
   firstShowOption.innerHTML = "All-Shows";
   showDropdown.prepend(firstShowOption);
 }
+function displayShow() {
+  if (showDropdown.value == "allShows") {
+    makeAllShowsPage();
+  }
+}
 
-function makeAllShowsPage() {
+function makeAllShowsPage(showList) {
   showSearchInput.style.display = "inline";
   searchBar.style.display = "none";
   episodeDropdown.style.display = "none";
   episodeDisplay.innerHTML = "Displaying All shows";
 
-  if (showDropdown.value == "allShows") {
-    rootElem.innerHTML = "";
-    rootElem.classList.remove("parentElement");
-    rootElem.classList.add("allShowContainer");
+  rootElem.innerHTML = "";
+  rootElem.classList.remove("parentElement");
+  rootElem.classList.add("allShowContainer");
 
-    for (let i = 0; i < allShows.length; i++) {
-      oneShowContainer = document.createElement("div");
-      oneShowContainer.classList.add("oneShowContainer");
-      let showName = document.createElement("h3");
-      //div container all the info in each show
-      let showInfoContainer = document.createElement("div");
-      showInfoContainer.classList.add("showInfoContainer");
-      let showImg = document.createElement("img");
-      let showSummary = document.createElement("p");
-      //showStatus contains the rating, genre, runtime
-      let statusContainer = document.createElement("div");
-      statusContainer.classList.add("statusContainer");
+  for (let i = 0; i < showList.length; i++) {
+    oneShowContainer = document.createElement("div");
+    oneShowContainer.classList.add("oneShowContainer");
+    let showName = document.createElement("h3");
+    //div container all the info in each show
+    let showInfoContainer = document.createElement("div");
+    showInfoContainer.classList.add("showInfoContainer");
+    let showImg = document.createElement("img");
+    let showSummary = document.createElement("p");
+    //showStatus contains the rating, genre, runtime
+    let statusContainer = document.createElement("div");
+    statusContainer.classList.add("statusContainer");
 
-      let showRated = document.createElement("h4");
-      let showGenres = document.createElement("h4");
-      let showStatus = document.createElement("h4");
-      let showRuntime = document.createElement("h4");
+    let showRated = document.createElement("h4");
+    let showGenres = document.createElement("h4");
+    let showStatus = document.createElement("h4");
+    let showRuntime = document.createElement("h4");
 
-      showName.innerHTML = allShows[i].name;
+    showName.innerHTML = showList[i].name;
 
-      if (allShows[i].image === null) {
-        // some of the shows doesn't provide photo, a default photo for them
-        showImg.src =
-          "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
-      } else {
-        showImg.src = allShows[i].image.medium;
-      }
-
-      showSummary.innerHTML = allShows[i].summary;
-      showRated.innerHTML = `Rated: ${allShows[i].rating.average}`;
-      showGenres.innerHTML = allShows[i].genres;
-      showStatus.innerHTML = `Status: ${allShows[i].status}`;
-      showRuntime.innerHTML = `Runtime: ${allShows[i].runtime}`;
-
-      // appending elements of each episode
-      statusContainer.append(showRated);
-      statusContainer.append(showGenres);
-      statusContainer.append(showStatus);
-      statusContainer.append(showRuntime);
-
-      showInfoContainer.appendChild(showImg);
-      showInfoContainer.appendChild(showSummary);
-      showInfoContainer.appendChild(statusContainer);
-
-      oneShowContainer.appendChild(showName);
-      oneShowContainer.appendChild(showInfoContainer);
-
-      rootElem.appendChild(oneShowContainer);
+    if (showList[i].image === null) {
+      // some of the shows doesn't provide photo, a default photo for them
+      showImg.src =
+        "https://cdn3.vectorstock.com/i/thumb-large/25/72/picture-coming-soon-icon-vector-31612572.jpg";
+    } else {
+      showImg.src = showList[i].image.medium;
     }
+
+    showSummary.innerHTML = showList[i].summary;
+    showRated.innerHTML = `Rated: ${showList[i].rating.average}`;
+    showGenres.innerHTML = showList[i].genres;
+    showStatus.innerHTML = `Status: ${showList[i].status}`;
+    showRuntime.innerHTML = `Runtime: ${showList[i].runtime}`;
+
+    // appending elements of each episode
+    statusContainer.append(showRated);
+    statusContainer.append(showGenres);
+    statusContainer.append(showStatus);
+    statusContainer.append(showRuntime);
+
+    showInfoContainer.appendChild(showImg);
+    showInfoContainer.appendChild(showSummary);
+    showInfoContainer.appendChild(statusContainer);
+
+    oneShowContainer.appendChild(showName);
+    oneShowContainer.appendChild(showInfoContainer);
+
+    rootElem.appendChild(oneShowContainer);
   }
 }
 
@@ -261,13 +264,16 @@ async function setup() {
   // try and catch error handling added
   try {
     allShowsDropdown();
+    makeAllShowsPage(allShows);
+
     let fetchedPromise = await fetch(showApiDisplayer());
     episodesList = await fetchedPromise.json();
     // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    showDropdown.addEventListener("change", makeAllShowsPage);
-    makePageForEpisodes(episodesList);
+    // showDropdown.addEventListener("change", makeAllShowsPage);
+
+    // makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
     // showSearchInput.addEventListener("keyup", (e) => searchShow(e, allShows));
     allEpisodesDropdown(episodesList);
@@ -282,3 +288,15 @@ window.onload = setup;
 // episodeDropdown.addEventListener("mouseover", (e) => {
 //   document.location.reload(true);
 //
+
+// let innerHTML = `<h2 class="episodeTitle">${episode.name}
+//     <span class="episodeCode">
+//     S${zeroPad(episode.season, 2)} E${zeroPad(episode.number, 2)}
+//     </span>
+//     </h2>
+//     <hr>
+//     <img src="${imgSrc}">
+//     <h3 class="summaryTitle">Summary:</h3>
+//     <div class="summaryText">${episode.summary}</div>
+//     <a class="episodeLink" href=${episode.url} target="_blank">More...</a>`;
+//   episodeBlock.innerHTML = innerHTML;
