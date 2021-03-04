@@ -6,6 +6,7 @@ const showDropdown = document.getElementById("showDropdown");
 // all shows are in the allShows Array
 const allShows = getAllShows();
 // global variable that will hold the fetched data from the api
+let episodesList;
 
 function makeAllShowsPage(showList) {
   showSearchInput.style.display = "inline";

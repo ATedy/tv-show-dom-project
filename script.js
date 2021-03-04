@@ -1,5 +1,5 @@
-//parent Element for the whole body content
 const rootElem = document.getElementById("root");
+// the main container of the page
 rootElem.classList.add("parentElement");
 
 // an async function change the generic url to one Api url using the show_Id provide in the show.js and  returns full Api url of a show
@@ -7,16 +7,17 @@ function showApiDisplayer() {
   let currentShowId = showDropdown.value;
   let tvShowApi = "https://api.tvmaze.com/shows/SHOW_ID/episodes";
   let currentShowApi = tvShowApi.replace("SHOW_ID", currentShowId);
-  // console.log(currentShowApi);
   return currentShowApi;
 }
+/*
 
-// Level 400 - Api
-// this function get called with the even on change of the shows dropdown
-// apiUrl will Api of a current show selected in the show dropdown
-// the global variable in here will hold the json data
+- this update function get called with the event on change of the shows dropdown
+- apiUrl will Api of a current show selected in the show dropdown
+- episodeList a global variable hold the json data after the fetch is done
+- The if condition is to stop fetching when we are displaying all shows selecting from the show dropdown, we ony fetch for the show names only
+
+*/
 async function updateShows() {
-  // fetch won't give error in the dropdown
   if (showDropdown.value !== "allShows") {
     let apiUrl = showApiDisplayer();
 
@@ -30,25 +31,23 @@ async function updateShows() {
   }
 }
 
-// setup is an async functions and will load on start of the page
-async function setup() {
-  // fetching and getting the data will be done here using the first show in the list to make the webpage on loading
-  // all the searchEpisode, allEpisodeDropdown will work just for the first show in the list
-  // after the on change event is fired the updateShows function will call these above functions to make a page for the selected show when user selects a show
+/*
+ - setup is an async functions and will load on start of the page
+ - fetching and getting the data will be done here using the first show in the list to make the webpage on loading
+ - after the on change event is fired the updateShows function will call these above functions to make a page for the selected show when user selects a show
+ -  try and catch error handling added 
+ - The function called inside the setup without events  will load on the start of the program.
+*/
 
-  // try and catch error handling added
+async function setup() {
   try {
     allShowsDropdown();
     makeAllShowsPage(allShows);
 
     let fetchedPromise = await fetch(showApiDisplayer());
     episodesList = await fetchedPromise.json();
-    // episodesList = await allEpisodes();
 
     showDropdown.addEventListener("change", updateShows);
-    // showDropdown.addEventListener("change", makeAllShowsPage);
-
-    // makePageForEpisodes(episodesList);
     searchBar.addEventListener("keyup", (e) => searchEpisode(e, episodesList));
     showSearchInput.addEventListener("keyup", searchShow);
     allEpisodesDropdown(episodesList);

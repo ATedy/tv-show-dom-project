@@ -1,15 +1,17 @@
-// searchInput the input field
+// search Input the input field for the episodes
 const searchBar = document.getElementById("searchInput");
-
+// text displaying the no of searched episode
 let displayedText = document.getElementById("episodeDisplay");
 //episode container div of each episode
 const episodeContainer = document.getElementsByClassName("episodeContainer");
 // episodeDropdown the select tag id
 const episodeDropdown = document.getElementById("episodeDropdown");
 
-let episodesList;
+/*
+- makePageForEpisodes function creates the page for episodes 
+- it will remove some class from the show displaying fun and add new class
+*/
 
-// Level100 showing all the episodes on the page
 function makePageForEpisodes(episodeList) {
   displayedText.innerHTML = "";
   searchBar.style.display = "inline";
@@ -50,7 +52,10 @@ function makePageForEpisodes(episodeList) {
   }
 }
 
-// Level 200- searching fro episode in the input field
+/*
+- search episode function, compares the searched value with name and summary of each episode
+*/
+
 function searchEpisode(e, episodeList) {
   // catches the user input value from the input field and lowercase it
   let searchValue = e.target.value.toLowerCase();
@@ -73,25 +78,10 @@ function searchEpisode(e, episodeList) {
   rootElem.insertAdjacentElement("beforebegin", displayedText);
 }
 
-//Level-300 Episode dropdown - displaying and selecting episode from the dropdown
-
 /*
- * Role - To add leading zeroes to a number
- * Parameter - Takes 2 parameters
- *  num - the number to which leading zeroes are to be added
- *  places - the number of digits the final result should have
- * Returns - A string containing the num with added leading zeroes to it.
- * Result - zeroPad(5, 3) gives the result as "005"
- ----
- function zeroPad(num, places) {
-  // calculate the number of zeroes that need to be prepended to num
-  let zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join("0") + num;
-}
------
- * This is how we use it inside our function
- oneEpisodeDropdown.innerHTML = `S${zeroPad( episodeList[i].season,2)} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
- */
+- All episode dropdown maker 
+- takes another Ev listener and to show selected episode
+*/
 
 function allEpisodesDropdown(episodeList) {
   episodeDropdown.innerHTML = "";
@@ -120,6 +110,7 @@ function allEpisodesDropdown(episodeList) {
   );
 }
 
+// This func called with the event on the drop down
 function displayEpisode(e, episodeList) {
   // if value is allEpisode - all page wil be displayed
   if (e.target.value === "allEpisodes") {
@@ -129,3 +120,23 @@ function displayEpisode(e, episodeList) {
     makePageForEpisodes([episodeList[e.target.value]]);
   }
 }
+
+// Another way for showing the episode names
+/*
+
+ * Role - To add leading zeroes to a number
+ * Parameter - Takes 2 parameters
+ *  num - the number to which leading zeroes are to be added
+ *  places - the number of digits the final result should have
+ * Returns - A string containing the num with added leading zeroes to it.
+ * Result - zeroPad(5, 3) gives the result as "005"
+ ----
+ function zeroPad(num, places) {
+  // calculate the number of zeroes that need to be prepended to num
+  let zero = places - num.toString().length + 1;
+  return Array(+(zero > 0 && zero)).join("0") + num;
+}
+-----
+ * This is how we use it inside our function
+ oneEpisodeDropdown.innerHTML = `S${zeroPad( episodeList[i].season,2)} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
+ */

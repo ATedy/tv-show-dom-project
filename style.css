@@ -1,8 +1,11 @@
 body {
-  background-color: #d9dadb;
+  background-color: #c4c2e4;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+#pageHeader {
+  margin: 0 auto;
 }
 #heading {
   text-align: center;
@@ -11,7 +14,7 @@ body {
 /* main div container */
 .parentElement {
   box-sizing: border-box;
-  background-color: #d9dadb;
+  background-color: #c4c2e4;
   display: grid;
   /* grid-template-columns: auto auto auto auto; */
   grid-template-columns: repeat(3, 1fr);
@@ -19,12 +22,12 @@ body {
   padding: 2rem;
 }
 
-/* series dropdown styling */
+/* show dropdown styling */
 #showDropdown {
   height: 24px;
   width: 250px;
   margin-right: 5em;
-  margin-left: 3.5em;
+  margin-left: 10.5em;
 }
 
 /* episode dropdown styling */
