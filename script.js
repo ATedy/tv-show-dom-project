@@ -134,16 +134,16 @@ function allEpisodesDropdown(episodeList) {
     let oneEpisodeDropdown = document.createElement("option");
     // each option element is getting index of the allEpisodes array as its value
     oneEpisodeDropdown.value = i;
-    oneEpisodeDropdown.innerHTML = `S${zeroPad(
-      episodeList[i].season,
-      2
-    )} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
+    // oneEpisodeDropdown.innerHTML = `S${zeroPad(
+    //   episodeList[i].season,
+    //   2
+    // )} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
 
-    // if (episodeList[i].number < 10) {
-    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
-    // } else {
-    //   oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
-    // }
+    if (episodeList[i].number < 10) {
+      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E0${episodeList[i].number} - ${episodeList[i].name}`;
+    } else {
+      oneEpisodeDropdown.innerHTML = `S0${episodeList[i].season}E${episodeList[i].number} - ${episodeList[i].name}`;
+    }
     episodeDropdown.appendChild(oneEpisodeDropdown);
   }
 
