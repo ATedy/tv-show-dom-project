@@ -61,7 +61,7 @@ function getAllShows() {
       name: "Horatio Hornblower",
       type: "Scripted",
       language: "English",
-      genres: ["Drama", "Action", "Adventure", "Amanuel"],
+      genres: ["Drama", "Action", "Adventure"],
       status: "Ended",
       runtime: 120,
       premiered: "1998-10-07",

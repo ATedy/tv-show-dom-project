@@ -9,24 +9,27 @@
   </head>
 
   <body>
-    <h1 id="heading">TV - Shows</h1>
+    <header id="pageHeader">
+      <h1 id="heading">TV - Shows</h1>
 
-    <select name="shows" id="showDropdown"> </select>
-    <select name="episodes" id="episodeDropdown"> </select>
-    <input
-      id="showSearch"
-      type="text"
-      name="search"
-      placeholder="Search Show Here"
-    />
-    <input
-      id="searchInput"
-      type="text"
-      name="search"
-      placeholder="Search Episode Here"
-    />
-    <h4 id="episodeDisplay">Displaying All episodes</h4>
-    <div id="root" class="parentElement"></div>
+      <select name="shows" id="showDropdown"> </select>
+      <select name="episodes" id="episodeDropdown"> </select>
+      <input
+        id="showSearch"
+        type="text"
+        name="search"
+        placeholder="Search Show Here"
+      />
+      <input
+        id="searchInput"
+        type="text"
+        name="search"
+        placeholder="Search Episode Here"
+      />
+      <h4 id="episodeDisplay">Displaying All episodes</h4>
+    </header>
+
+    <main id="root" class="parentElement"></main>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
@@ -35,6 +38,10 @@
 
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
+    <!--A script only for the shows -->
+    <script src="showPageMaker.js"></script>
+    <!--A script only for the episodes -->
+    <script src="episodePageMaker.js"></script>
     <footer id="copyrightInfo">
       <h5>
         This is for educational purposes only. This data is property of
