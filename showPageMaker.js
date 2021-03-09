@@ -5,6 +5,8 @@ const showSearchInput = document.getElementById("showSearch");
 const showDropdown = document.getElementById("showDropdown");
 // all shows are in the allShows Array
 const allShows = getAllShows();
+// button for the all shows btn
+let btnShows = document.getElementById("btnAllShows");
 // global variable that will hold the fetched data from the api
 let episodesList;
 
@@ -22,6 +24,8 @@ function makeAllShowsPage(showList) {
     oneShowContainer = document.createElement("div");
     oneShowContainer.classList.add("oneShowContainer");
     let showName = document.createElement("h3");
+    showName.style.cursor = "pointer";
+
     //div container all the info in each show
     let showInfoContainer = document.createElement("div");
     showInfoContainer.classList.add("showInfoContainer");
@@ -66,8 +70,20 @@ function makeAllShowsPage(showList) {
     oneShowContainer.appendChild(showInfoContainer);
 
     rootElem.appendChild(oneShowContainer);
+
+    // variable for all the show names
+    // it will take current select show and use it as array of one element
+    showName.addEventListener("click", () => {
+      makeAllShowsPage([showList[i]]);
+    });
   }
 }
+
+//all shows button which will display all the show page on click
+
+btnShows.addEventListener("click", () => {
+  makeAllShowsPage(allShows);
+});
 
 //for the shows
 
