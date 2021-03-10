@@ -104,11 +104,6 @@ function allShowsDropdown() {
     return 0;
   });
 
-  // sorting with id
-  // allShows.sort(function (firstShow, secondShow) {
-  //   return firstShow.id - b.secondShow;
-  // });
-
   //All-Episodes will be addded as a first option element using the prepend in the dropdown
 
   for (let i = 0; i < allShows.length; i++) {

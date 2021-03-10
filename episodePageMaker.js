@@ -120,23 +120,3 @@ function displayEpisode(e, episodeList) {
     makePageForEpisodes([episodeList[e.target.value]]);
   }
 }
-
-// Another way for showing the episode names
-/*
-
- * Role - To add leading zeroes to a number
- * Parameter - Takes 2 parameters
- *  num - the number to which leading zeroes are to be added
- *  places - the number of digits the final result should have
- * Returns - A string containing the num with added leading zeroes to it.
- * Result - zeroPad(5, 3) gives the result as "005"
- ----
- function zeroPad(num, places) {
-  // calculate the number of zeroes that need to be prepended to num
-  let zero = places - num.toString().length + 1;
-  return Array(+(zero > 0 && zero)).join("0") + num;
-}
------
- * This is how we use it inside our function
- oneEpisodeDropdown.innerHTML = `S${zeroPad( episodeList[i].season,2)} E${zeroPad(episodeList[i].number, 2)} - ${episodeList[i].name}`;
- */
