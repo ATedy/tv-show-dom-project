@@ -3,19 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
+    <title>TV Show Project |Amanuel Tedros (ATedy)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <div id="root">
-    </div>
+    <header id="pageHeader">
+      <h1 id="heading">TV - Shows</h1>
+
+      <select name="shows" id="showDropdown"> </select>
+      <select name="episodes" id="episodeDropdown"> </select>
+      <input
+        id="showSearch"
+        type="text"
+        name="search"
+        placeholder="Search Show Here"
+      />
+      <input
+        id="searchInput"
+        type="text"
+        name="search"
+        placeholder="Search Episode Here"
+      />
+      <h4 id="episodeDisplay">Displaying All episodes</h4>
+      <button id="btnAllShows">All-Shows</button>
+    </header>
+
+    <main id="root" class="parentElement"></main>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
+    <!-- Loads a provided function called getAllShows() which returns all shows -->
+    <script src="shows.js"></script>
 
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
+    <!--A script only for the shows -->
+    <script src="showPageMaker.js"></script>
+    <!--A script only for the episodes -->
+    <script src="episodePageMaker.js"></script>
+    <footer id="copyrightInfo">
+      <h5>
+        This is for educational purposes only. This data is property of
+        <a href="https://www.tvmaze.com/" target="_blank">TVMaze.com</a>
+      </h5>
+    </footer>
   </body>
 </html>

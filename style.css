@@ -1,3 +1,156 @@
-#root {
-  color: red;
+body {
+  background-color: #c4c2e4;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#pageHeader {
+  margin: 0 auto;
+}
+#heading {
+  text-align: center;
+}
+
+/* main div container */
+.parentElement {
+  box-sizing: border-box;
+  background-color: #c4c2e4;
+  display: grid;
+  /* grid-template-columns: auto auto auto auto; */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 2rem;
+}
+
+#btnAllShows {
+  font-size: 1.2rem;
+  padding: 2px 10px 2px 10px;
+  margin-right: 12rem;
+  float: right;
+  cursor: pointer;
+  background-color: rgb(230, 230, 247);
+  border-radius: 4px;
+}
+
+/* show dropdown styling */
+#showDropdown {
+  height: 24px;
+  width: 250px;
+  margin-right: 5em;
+  margin-left: 10.5em;
+}
+
+/* parent div for all shows */
+.allShowContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* div container for each show */
+.oneShowContainer {
+  width: 80%;
+  margin: 15px 0;
+  padding: 15px;
+  background-color: #f2f3f5;
+  border-radius: 2px;
+}
+.oneShowContainer img {
+  border-radius: 2px;
+  padding-bottom: 10px;
+  padding-top: 0;
+}
+.showInfoContainer {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  padding: 0 15px 0 15px;
+}
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  padding-left: 10px;
+  font-size: 1.2rem;
+}
+.showInfoContainer > p {
+  font-size: 1.4rem;
+  text-align: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.oneShowContainer h3 {
+  display: inline-block;
+  padding: 3px;
+  justify-self: center;
+  font-size: 2rem;
+}
+
+/* Episodes Page Styling */
+
+/* div containing each episode */
+.episodeContainer {
+  background-color: #f2f3f5;
+  border-radius: 2px;
+}
+
+/* episode dropdown styling */
+#episodeDropdown {
+  height: 24px;
+  width: 220px;
+  margin-right: 5em;
+}
+
+/* search text input id */
+#searchInput {
+  margin-top: 10px;
+  width: 18em;
+  height: 20px;
+}
+
+/* each episode header */
+.episodeContainer > h4 {
+  display: block;
+  margin: 5px auto;
+  text-align: center;
+  border: 1px solid black;
+  box-shadow: 2px 2px 5px gray;
+  border-radius: 3px;
+  height: 25px;
+  width: 90%;
+  padding-top: 10px;
+}
+
+.episodeContainer > p {
+  text-align: justify;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+/* each episode img */
+.episodeContainer > img {
+  display: block;
+  margin: 0 auto;
+  border-radius: 3px;
+}
+
+.hidden {
+  display: none;
+}
+
+#episodeDisplay {
+  display: inline;
+  padding-left: 15px;
+}
+
+/* page footer styling */
+
+#copyrightInfo {
+  text-align: center;
+  background-color: #f2f3f5;
+  padding: 1px;
+  border-radius: 2px;
 }
