@@ -1,5 +1,4 @@
 body {
-  background-color: #c4c2e4;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -150,7 +149,17 @@ body {
 
 #copyrightInfo {
   text-align: center;
-  background-color: #f2f3f5;
-  padding: 1px;
-  border-radius: 2px;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Tailwind overrides */
+.navBtn.active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html:not(.dark) .navBtn.active {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111827;
 }
